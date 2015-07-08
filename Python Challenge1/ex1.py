@@ -21,7 +21,7 @@ def sWords(origin):
     return sOrigin
     
 ###     Question 3
-def calulWords(origin):
+def calcuWords(origin):
     lcount = 0
     ucount = 0
     for i in origin:
