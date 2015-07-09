@@ -1,0 +1,141 @@
+---
+title: "Descriptive & Summary Statistics of NYC CitiBike"
+author: "Linfeng Zhou    lz1335@nyu.edu"
+output: pdf_document
+---
+##Question 1: Summary statistics table for January 2015 data
+    Firstly, we load the data from local dataset and checking the size and dimensions of this file.
+```{r}
+setwd("E:/Code/NYU-UCSL-2015/R")
+citibike_data<-read.csv("201501-citibike-tripdata.csv",header=TRUE)
+dim(citibike_data)  
+   
+```
+   
+   After that, we exploring headers in the .csv file
+
+```{r}
+names(citibike_data)
+```
+    
+    Now, it's time to analyze our mission. Qustion 1 ask us to provide summary statistics tables for 
+    
+    - (1) all January 2015 data 
+    
+    - (2) January 2015 data without outliers
+    
+    It this situation, we should use z-scores and subset funtion to generate two dataset: first one 
+    is the original one, and the second one is clean data (which don't have outliers). Using z-scores(Z>3)
+    ,we can detect outliers from our original data and delete them.
+    
+```{r}
+#COMPUTING Z-SCORE
+tripduration.sd <- sd(citibike_data$tripduration)
+tripduration.mean <- mean(citibike_data$tripduration)
+z <- (citibike_data$tripduration-tripduration.mean)/tripduration.sd
+```
+
+    We have tow dataset:one is named, another is named. Using pre-bulit function we calculate the summary
+    statistics for January 2015 data.(The code is omitted, but you can see it at Rmd file)
+
+```{r, echo=FALSE}
+#creating subsets of data by Z value (z>3 as outlier)
+bikedata_clean <- subset(citibike_data, z<3)
+bikedata_origi <- subset(citibike_data)
+
+
+## calculating the count for tripduration 
+bikedata_clean.count <- dim(bikedata_clean)[1]
+bikedata_origi.count <- dim(bikedata_origi)[1]
+
+## calculating the mean for tripduration 
+bikedata_clean.mean <- mean(bikedata_clean$tripduration)
+bikedata_origi.mean <- mean(bikedata_origi$tripduration)
+
+## calculating the standard deviation for tripduration
+bikedata_clean.sd <- sd(bikedata_clean$tripduration)
+bikedata_origi.sd <- sd(bikedata_origi$tripduration)
+
+## calculating the min for tripduration
+bikedata_clean.min <- min(bikedata_clean$tripduration)
+bikedata_origi.min <- min(bikedata_origi$tripduration)
+
+## calculating the max for tripduration
+bikedata_clean.max <- max(bikedata_clean$tripduration)
+bikedata_origi.max <- max(bikedata_origi$tripduration)
+
+## calculating the median for tripduration
+bikedata_clean.median <- median(bikedata_clean$tripduration)
+bikedata_origi.median <- median(bikedata_origi$tripduration)
+
+## calculate the quantiles for tripduration
+bikedata_clean.quantile <- quantile(bikedata_clean$tripduration)
+bikedata_origi.quantile<- quantile(bikedata_origi$tripduration)
+
+## summary for tripduration
+bikedata_clean.summary<-c(bikedata_clean.count,bikedata_clean.mean,
+                          bikedata_clean.sd,bikedata_clean.min,
+                          bikedata_clean.max,bikedata_clean.median,
+                          bikedata_clean.quantile[2],
+                          bikedata_clean.quantile[4])
+bikedata_origi.summary<-c(bikedata_origi.count,bikedata_origi.mean,
+                          bikedata_origi.sd,bikedata_origi.min,
+                          bikedata_origi.max,bikedata_origi.median,
+                          bikedata_origi.quantile[2],
+                          bikedata_origi.quantile[4]
+                          )
+## data.frame the suumary
+bikedata_summary <- data.frame(bikedata_origi.summary,bikedata_clean.summary)
+row.names(bikedata_summary )<-(c("Count","Mean","Standard Deviation","Min",
+                                 "Max","Median","25% Quantiles",
+                                  "75 Quantiles"))
+```
+    After that, we have organize all statistics in one table, which is:
+```{r}
+bikedata_summary 
+```
+  
+  Comment on the folloing question:
+   
+   - What can you say about the central tendency of this month?
+     
+     The average value and median in original data are (`r bikedata_origi.mean`,`r bikedata_origi.median`), and in data without outliers are (`r bikedata_clean.mean`,`r bikedata_clean.median` )
+     
+   - What can you say about the spread and dispersion of the data?
+   
+     The range and standard deviation in original data are(`r bikedata_origi.max-bikedata_origi.min`,`r bikedata_origi.sd`), and the same statistics in data without outliers are(`r bikedata_clean.max-bikedata_clean.min`,`r bikedata_clean.sd`)
+     
+   - What is the effect of outliers as per our summary statistics?
+     
+     As we can see the summary statistics table, effects of outliers are: 1. Raised the average of
+     dataset, the average value of original data is bigger than clean data. 2. Raised the standard deviation
+     of the dateset. Other statistics like Max Value, Quantiles Value get a corresponding rise.
+    
+## Question 2: Visualize the trip duration by user type
+   
+   Using ggplot2, plots of trip duration data by user type are :
+
+```{r,echo=FALSE}
+library(ggplot2)
+#Visualize the trip duration by user type using clean
+bikedata_Customer<- subset(bikedata_clean,usertype=="Customer")
+bikedata_Customer<- subset(bikedata_clean,usertype=="Subscriber")
+
+## histgram of tropduration by user type
+ggplot(bikedata_clean,aes(x=tripduration)) + geom_histogram(fill="white",colour="black") + 
+      facet_grid(usertype~., scales="free") + ggtitle("Trip Duration by User Type")
+
+## boxplat of tropduration by user type
+ggplot(bikedata_clean,aes(x=factor(usertype),y=tripduration)) + geom_boxplot(outlier.size=0.1,outlier.shape=0) +ggtitle("Boxplot for CitiBike")
+
+```
+
+    Comment on the following:
+    
+    - How does outliers affect histograms and/or box plots? 
+      
+      It will affect on widths of histograms and amount of outliers on boxplots.
+    
+    - What do you expect the histogram of this month would look like if you were to plot it with outliers
+      
+      Histograms may have a long tail, and box plots may show outliers if there are too many outliers.

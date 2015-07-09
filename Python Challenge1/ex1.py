@@ -12,11 +12,12 @@ def gArray0(x,y):
 def sWords(origin):
     listOrigin = origin.split()
     listOrigin.sort()
-    i = 0
+    i = 1
     while i < len(listOrigin):
-        if listOrigin[i+1] == listOrigin[i] :
-            listOrigin.pop(i+1)
-        i += 1
+        if listOrigin[i-1] == listOrigin[i] :
+            listOrigin.pop(i)
+        else:        
+            i += 1
     sOrigin = ' '.join(listOrigin)
     return sOrigin
     
@@ -31,4 +32,3 @@ def calcuWords(origin):
             ucount += 1
     print 'UPPER CASE: %d'  % ucount
     print 'LOWER CASE: %d'  % lcount
-    
