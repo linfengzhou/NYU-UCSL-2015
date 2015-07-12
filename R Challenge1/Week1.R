@@ -57,7 +57,8 @@ bikedata_summary
 
 #Visualize the trip duration by user type using clean
 bikedata_Customer<- subset(bikedata_clean,usertype=="Customer")
-bikedata_Customer<- subset(bikedata_clean,usertype=="Subscriber")
+bikedata_Subscriber<- subset(bikedata_clean,usertype=="Subscriber")
+
 
 ## histgram of tropduration by user type
 ggplot(bikedata_clean,aes(x=tripduration)) + geom_histogram(fill="white",colour="black")+ facet_grid(usertype~., scales="free")

@@ -35,8 +35,10 @@ tripduration.mean <- mean(citibike_data$tripduration)
 z <- (citibike_data$tripduration-tripduration.mean)/tripduration.sd
 ```
 
-    We have tow dataset:one is named, another is named. Using pre-bulit function we calculate the summary
-    statistics for January 2015 data.(The code is omitted, but you can see it at Rmd file)
+    We have tow dataset:one is named bikedata_clean, another is named bikedata_clean. 
+    
+    Using pre-bulit function we calculate the summary statistics for January 2015 data.
+    (The code is omitted, but you can see it at Rmd file)
 
 ```{r, echo=FALSE}
 #creating subsets of data by Z value (z>3 as outlier)
@@ -119,7 +121,7 @@ bikedata_summary
 library(ggplot2)
 #Visualize the trip duration by user type using clean
 bikedata_Customer<- subset(bikedata_clean,usertype=="Customer")
-bikedata_Customer<- subset(bikedata_clean,usertype=="Subscriber")
+bikedata_Subscriber<- subset(bikedata_clean,usertype=="Subscriber")
 
 ## histgram of tropduration by user type
 ggplot(bikedata_clean,aes(x=tripduration)) + geom_histogram(fill="white",colour="black") + 
@@ -139,3 +141,5 @@ ggplot(bikedata_clean,aes(x=factor(usertype),y=tripduration)) + geom_boxplot(out
     - What do you expect the histogram of this month would look like if you were to plot it with outliers
       
       Histograms may have a long tail, and box plots may show outliers if there are too many outliers.
+      
+      
