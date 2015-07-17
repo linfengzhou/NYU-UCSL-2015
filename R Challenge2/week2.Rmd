@@ -1,0 +1,26 @@
+---
+title: "Hypothesis Testing"
+author: "Linfeng Zhou"
+date: "July 17, 2015"
+output: html_document
+---
+
+## Question 1
+   Statement #1: The majority of the trips are for short commutes lasting no more than 15min.
+   
+  - What should be your null hypothesis?
+      The null hypothesis is: $$H_{0}: \mu\leq15min $$
+  - What is a reasonable alternative?
+      $$H_{1}: \mu>15min$$
+  - What type I error test are your conducting?
+      The type I error I am conducting is 0.05.
+  - What is significant level in your test?
+      The significant level in my test is 0.05.
+      
+## Question 2 
+  Statement #2:  Citi Bike System wants to tackle bike rides incurring in overtime fees, particularly their interest is in rides lasting more than 45min.
+  
+   - Test the hypothesis that the Median for overtime is 2hrs long with α=5% (overtime = 45mins or more).  
+     - Method I : t test
+     
+    
