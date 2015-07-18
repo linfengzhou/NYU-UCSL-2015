@@ -4,7 +4,22 @@ author: "Linfeng Zhou"
 date: "July 17, 2015"
 output: html_document
 ---
+```{r,echo=FALSE}
+# loading data from .csv file:
+setwd("/Users/luke/Documents/NYU-UCSL-2015//R Challenge2/")
+cleandata <- read.csv("Citi+Bike+Clean+Data.csv",header=TRUE)
+cleandata$tripduration<- cleandata$tripduration /60 
 
+## statement 2
+## Test the hypothesis that the Median for overtime is 2hrs long 
+## with α=5% (overtime = 45mins or more).
+
+subsetdata2<-subset(cleandata$tripduration,cleandata$tripduration>=45)
+
+mean2 <- mean(subsetdata2)
+ttest <-  t.test(subsetdata2-120)
+
+```
 ## Question 1
    Statement #1: The majority of the trips are for short commutes lasting no more than 15min.
    
@@ -20,7 +35,35 @@ output: html_document
 ## Question 2 
   Statement #2:  Citi Bike System wants to tackle bike rides incurring in overtime fees, particularly their interest is in rides lasting more than 45min.
   
-   - Test the hypothesis that the Median for overtime is 2hrs long with α=5% (overtime = 45mins or more).  
-     - Method I : t test
-     
+  - Test the hypothesis that the Median for overtime is 2hrs long with α=5% (overtime = 45mins or more).  
+  
+     - Method I: t(student) test </br>
+     According to requirement, the null hypothesis and alternative hypothesis are:
+    $$H_{0}: \mu > 120min \Leftrightarrow H_{1}: \mu \leq 120 min$$
+    $\mu$ is population mean, the sample mean is: $\overline{X}$=`r mean2`. Using pre-built ```t.test``` function, the details of t-test are following:
+    ```{r}
+    t.test(subsetdata2-120)
+    ```
+    P-value of t-test is `r  ttest$p.value` < 0.05, therefore we deny the null hypothesis.
+    - Method II: Sign test </br>
+    library(nortest)
+    lillie.test(subsetdata2) 
     
+    t-test  small sample 
+            and from norm distribution 
+            
+    using lillie.test ...
+    the result show that subsetdata2 don't fit on norm distribute
+    in this case, t test may have some erroronce
+    
+    sign test   median rather than mean  
+    not effected by distribution 
+    the null hypothesis and alternative hypothesis are:
+    
+    
+    the result of sign test is :
+    pvalue 
+    deny null hypothesis
+    
+## Quenstion 3 
+
