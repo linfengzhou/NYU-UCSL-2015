@@ -1,0 +1,187 @@
+---
+title: "Hypothesis Testing"
+author: "Linfeng Zhou"
+date: "July 17, 2015"
+<<<<<<< HEAD
+<<<<<<< HEAD
+output: pdf_document
+---
+```{r,echo=FALSE}
+# loading data from .csv file:
+setwd("E://Github Data/NYU-UCSL-2015/R Challenge2/")
+=======
+=======
+>>>>>>> origin/master
+output: html_document
+---
+```{r,echo=FALSE}
+# loading data from .csv file:
+setwd("/Users/luke/Documents/NYU-UCSL-2015//R Challenge2/")
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
+>>>>>>> origin/master
+cleandata <- read.csv("Citi+Bike+Clean+Data.csv",header=TRUE)
+cleandata$tripduration<- cleandata$tripduration /60 
+
+## statement 2
+## Test the hypothesis that the Median for overtime is 2hrs long 
+<<<<<<< HEAD
+<<<<<<< HEAD
+## with alpha=5% (overtime = 45mins or more).
+=======
+## with Î±=5% (overtime = 45mins or more).
+>>>>>>> origin/master
+=======
+## with Î±=5% (overtime = 45mins or more).
+>>>>>>> origin/master
+
+subsetdata2<-subset(cleandata$tripduration,cleandata$tripduration>=45)
+
+mean2 <- mean(subsetdata2)
+ttest <-  t.test(subsetdata2-120)
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+subsetdata3<-subset(cleandata,cleandata$tripduration>=45)
+attach(subsetdata3)
+
+=======
+>>>>>>> origin/master
+=======
+>>>>>>> origin/master
+```
+## Question 1
+   Statement #1: The majority of the trips are for short commutes lasting no more than 15min.
+   
+  - What should be your null hypothesis?
+      The null hypothesis is: $$H_{0}: \mu\leq15min $$
+  - What is a reasonable alternative?
+      $$H_{1}: \mu>15min$$
+<<<<<<< HEAD
+<<<<<<< HEAD
+  - What type I error test are your conducting?  
+  The type I error I am conducting is 0.05.
+  - What is significant level in your test?   
+  The significant level in my test is 0.05.
+=======
+=======
+>>>>>>> origin/master
+  - What type I error test are your conducting?
+      The type I error I am conducting is 0.05.
+  - What is significant level in your test?
+      The significant level in my test is 0.05.
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
+>>>>>>> origin/master
+      
+## Question 2 
+  Statement #2:  Citi Bike System wants to tackle bike rides incurring in overtime fees, particularly their interest is in rides lasting more than 45min.
+  
+<<<<<<< HEAD
+<<<<<<< HEAD
+  - Test the hypothesis that the Median for overtime is 2hrs long with alpha=5% (overtime = 45mins or more).  
+    
+     (1) Method I: t(student) test  
+     
+=======
+  - Test the hypothesis that the Median for overtime is 2hrs long with Î±=5% (overtime = 45mins or more).  
+  
+     - Method I: t(student) test </br>
+>>>>>>> origin/master
+=======
+  - Test the hypothesis that the Median for overtime is 2hrs long with Î±=5% (overtime = 45mins or more).  
+  
+     - Method I: t(student) test </br>
+>>>>>>> origin/master
+     According to requirement, the null hypothesis and alternative hypothesis are:
+    $$H_{0}: \mu > 120min \Leftrightarrow H_{1}: \mu \leq 120 min$$
+    $\mu$ is population mean, the sample mean is: $\overline{X}$=`r mean2`. Using pre-built ```t.test``` function, the details of t-test are following:
+    ```{r}
+    t.test(subsetdata2-120)
+    ```
+<<<<<<< HEAD
+<<<<<<< HEAD
+  
+    
+     
+     (2) Method II: Sign test 
+    
+    T-test's result may have error since the test dataset are required two properties: 
+    
+    1. The dataset should be samll sample. 
+    
+    2. The sample are from norm distribution. 
+    
+    Due to those reasons, we can use other statistical diagnostic methods to decrease error. One of those methods is sign test which is a non-paramatric hypothesis test model. It is more robust than t-test when we deal with asymmetric distribution.
+    
+    The null hypothesis and alternative hypothesis are:
+    $$H_{0}: M_{e} > 120min \Leftrightarrow H_{1}: M_{e} \leq 120 min$$
+    
+    $M_{e}$ is median of dataset.
+    
+    
+    ```{r}
+    binom.test(sum(subsetdata2<120),length(subsetdata2),0.5)
+    ```
+   
+    
+  - Provide a paragraph discussing the findings and statistical significance of the test. 
+   
+     Both p-value of t-test and sign test are smaller than 0.05, therefore we reject the null hypothesis which assumed that the median for overtime is 2hrs long with alpha=5%.
+    
+  
+## Question 3
+Citi Bike management thinks that men incur in more overtime fees. Test this hypothesis by comparing overtime variances across genders.The null hypothesis and alternative hypothesis are:
+$$H_{0}:\sigma _{1}^{2}= \sigma _{2}^{2}\Leftrightarrow H_{1}:\sigma _{1}^{2}\neq  \sigma _{2}^{2}$$
+
+
+```{r}
+table(gender)
+aggregate(tripduration,by=list(gender),FUN=mean)
+aggregate(tripduration,by=list(gender),FUN=sd)
+summary(aov(cleandata$tripduration ~ cleandata$gender))
+```
+  
+  
+From the means, it appears that trip duration of men are greater than women is an overtime situation. We can observe that the f-statist is 121.5 with a p-value of 2e-16 which means the ANOVA F test for gender is significant.  We clearly reject the  null hypothesis of equal means for both gender.
+    
+
+```{r, echo=FALSE}
+library(ggplot2)
+ggplot(subsetdata3,aes(x=factor(gender),y=tripduration)) + geom_boxplot(outlier.size=0.5,outlier.shape=0) +ggtitle("Boxplot for CitiBike")
+```
+
+  From the boxplot it appears that the mean trip duration for gender =¡±1¡± is greater than that of gender ¡°2¡±.
+  
+=======
+=======
+>>>>>>> origin/master
+    P-value of t-test is `r  ttest$p.value` < 0.05, therefore we deny the null hypothesis.
+    - Method II: Sign test </br>
+    library(nortest)
+    lillie.test(subsetdata2) 
+    
+    t-test  small sample 
+            and from norm distribution 
+            
+    using lillie.test ...
+    the result show that subsetdata2 don't fit on norm distribute
+    in this case, t test may have some erroronce
+    
+    sign test   median rather than mean  
+    not effected by distribution 
+    the null hypothesis and alternative hypothesis are:
+    
+    
+    the result of sign test is :
+    pvalue 
+    deny null hypothesis
+    
+## Quenstion 3 
+
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
+>>>>>>> origin/master
