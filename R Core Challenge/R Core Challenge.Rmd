@@ -1,0 +1,106 @@
+---
+title: "Stats R Lab Core Challenge: Linear Model & Prediction"
+author: "Linfeng Zhou"
+date: "Sunday, August 02, 2015"
+output: pdf_document
+---
+
+
+## 1 Summary statistics
+  Firstly, we load the data and using summary() function to obtain summary statistics. 
+  
+```{r,echo=FALSE}
+library(ggplot2)
+setwd("E:/Github Data/NYU-UCSL-2015/R Core Challenge")
+dataset <- read.csv("2014-07 - Citi Bike trip data.csv", header=TRUE)
+dataset = subset(dataset,dataset$birth.year != "\\N")
+
+
+## def z-score function & calculate z-score
+zscore <- function(citibike_data){
+  tripduration.sd <- sd(citibike_data$tripduration)
+  tripduration.mean <- mean(citibike_data$tripduration)
+  z <- (citibike_data$tripduration-tripduration.mean)/tripduration.sd
+  return(z)
+}
+
+z <- zscore(dataset)
+
+## subset data
+bikedata_origi <- dataset 
+bikedata_clean  <- subset(dataset, z<2 & z>-2)
+
+add_age <- function (dataset)
+{
+  a <- 2015-as.numeric(as.character(dataset$birth.year))
+}
+
+```
+
+   The summary statistics of all data are:
+```{r}
+summary(bikedata_origi$tripduration)
+
+```
+   The summary statistics of clean data are:
+```{r}
+summary(bikedata_clean$tripduration)
+
+```
+
+## 2 Histogram and boxplot
+
+```{r,echo=FALSE}
+library(ggplot2)
+
+ggplot(bikedata_origi,aes(x=tripduration)) + geom_histogram(binwidth=150,fill="white",colour="black")+ggtitle("tripduration of Original Data")
+
+ggplot(bikedata_clean,aes(x=tripduration)) + geom_histogram(binwidth=100,fill="white",colour="black")+ggtitle("tripduration of Clean Data")
+
+ggplot(bikedata_origi,aes(x=factor(usertype),y=tripduration)) + geom_boxplot(outlier.size=0.1,outlier.shape=0) +ggtitle("Boxplot for Original Data")
+
+ggplot(bikedata_clean,aes(x=factor(usertype),y=tripduration)) + geom_boxplot(outlier.size=0.1,outlier.shape=0) +ggtitle("Boxplot for Clean Data")
+
+```
+
+## 3 Regression analysis 
+```{r,echo=FALSE}
+bikedata_origi$age <- add_age(bikedata_origi)
+bikedata_clean$age <- add_age(bikedata_clean)
+
+mean_age <- function (dataset) {
+  trip_by_age <- with(dataset,split(tripduration,age))
+  tripduration <- sapply(trip_by_age,mean)
+  tripduration  <- data.frame(tripduration)
+  age <- as.numeric(names(trip_by_age))
+  data <- cbind(tripduration,age)
+}
+
+origidata <- mean_age (bikedata_origi)
+cleandata <- mean_age (bikedata_clean)
+
+fit1 <- lm (tripduration ~ age , origidata)
+fit2 <- lm (tripduration ~ age , cleandata)
+
+summary(fit1)
+summary(fit2)
+```
+
+## 4 Compare the two models and comment on the following  
+  
+  - Which model is better?
+   
+     From the regression analysis' summary, we can see that the R-square of original dataset is larger than the dataset without outliers, therefore, we conclude that first model is better.
+  
+  - What is the effect of age in trip duration?
+     
+    As we can see the coefficients of regression models, the coefficient of age is positive, which means age has a positive effect in trip duration.
+  
+  - What is the effect of outliers in these models?
+  
+    The outliers increase coefficients of models not only on age parameters but also on intercept, which may cause overfitting .
+  
+   - From this analysis, what would you recommend Citi Bike in terms of a more equitable and socially responsible program for NYC and other cities around the world?  
+    
+     According to our model, most users are in short-distance driving. Therefore we can set more citi bike in order to fit people's need. 
+      
